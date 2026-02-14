@@ -66,16 +66,17 @@ stages:
         npm run build
       displayName: "npm ci & build"
     - script: |
-        echo "ArtifactStagingDirectory=$(Build.ArtifactStagingDirectory)"
         echo "CurrentDir:"
         cd
-        echo "List staging root:"
-        dir "$(Build.ArtifactStagingDirectory)"
-        echo "List staging backend:"
-        dir "$(Build.ArtifactStagingDirectory)\backend"
-      displayName: "Debug: list publish output"
+        echo "List frontend:"
+        dir frontend
+        echo "List frontend/login-ui:"
+        dir frontend\login-ui
+        echo "List dist:"
+        dir frontend\login-ui\dist || echo "dist not found"
+      displayName: "Debug: list frontend dist"
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: "frontend/login-ui/dist"
+        targetPath: "frontend\\login-ui\\dist"
         artifact: "frontend"
       displayName: "Publish pipleline frontend artifacts"
