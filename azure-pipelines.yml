@@ -31,7 +31,15 @@ stages:
         dotnet build -c $(BuildConfiguration) --no-restore
         dotnet test -c $(BuildConfiguration) --no-build
       displayName: "dotnet restore/build/test"
-
+    - script: |
+        cd backend/LoginApi
+        dotnet publish -c $(BuildConfiguration) -o "$(Build.ArtifactStagingDirectory)\backend"
+      displayName: "Backend publish"
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: "$(Build.ArtifactStagingDirectory)\backend"
+        ArtifactName: "backend"
+      displayName: "Publish backend artifacts"
   - job: Frontend
     displayName: "Frontend - build"
     steps:
