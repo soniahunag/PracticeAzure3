@@ -39,7 +39,18 @@ stages:
       inputs:
         PathtoPublish: "$(Build.ArtifactStagingDirectory)\backend"
         ArtifactName: "backend"
+        publishLocation: "Container"
       displayName: "Publish backend artifacts"
+    - script: |
+        echo "ArtifactStagingDirectory=$(Build.ArtifactStagingDirectory)"
+        echo "CurrentDir:"
+        cd
+        echo "List staging root:"
+        dir "$(Build.ArtifactStagingDirectory)"
+        echo "List staging backend:"
+        dir "$(Build.ArtifactStagingDirectory)\backend"
+      displayName: "Debug: list publish output"
+
   - job: Frontend
     displayName: "Frontend - build"
     steps:
