@@ -34,7 +34,7 @@ stages:
     - script: |
         cd backend/LoginApi
         mkdir "$(Build.ArtifactStagingDirectory)\backend" || echo "backend folder exists"
-        dotnet publish -c $(BuildConfiguration) -o "$(Build.ArtifactStagingDirectory)\backend"
+        dotnet publish -c $(BuildConfiguration)
       displayName: "Backend publish"
     - script: |
         echo "ArtifactStagingDirectory=$(Build.ArtifactStagingDirectory)"
@@ -47,10 +47,11 @@ stages:
       displayName: "Debug: list publish output"
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: "$(Build.ArtifactStagingDirectory)\backend"
+        PathtoPublish: "backend/LoginApi/bin/$(BuildConfiguration)/net8.0/publish"
         ArtifactName: "backend"
         publishLocation: "Container"
       displayName: "Publish backend artifacts"
+
    
 
   - job: Frontend
