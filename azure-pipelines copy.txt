@@ -45,11 +45,12 @@ stages:
         echo "List staging backend:"
         dir "$(Build.ArtifactStagingDirectory)\backend"
       displayName: "Debug: list publish output"
-    - task: PublishPipelineArtifact@1
+    - task: PublishBuildArtifacts@1
       inputs:
-        targetPath: "backend/LoginApi/bin/$(BuildConfiguration)/net8.0/publish"
-        artifact: "backend"
-      displayName: "Publish pipleline backend artifacts"
+        PathtoPublish: "backend/LoginApi/bin/$(BuildConfiguration)/net8.0/publish"
+        ArtifactName: "backend"
+        publishLocation: "Container"
+      displayName: "Publish backend artifacts"
 
    
 
