@@ -65,6 +65,15 @@ stages:
         npm ci
         npm run build
       displayName: "npm ci & build"
+    - script: |
+        echo "ArtifactStagingDirectory=$(Build.ArtifactStagingDirectory)"
+        echo "CurrentDir:"
+        cd
+        echo "List staging root:"
+        dir "$(Build.ArtifactStagingDirectory)"
+        echo "List staging backend:"
+        dir "$(Build.ArtifactStagingDirectory)\backend"
+      displayName: "Debug: list publish output"
     - task: PublishPipelineArtifact@1
       inputs:
         targetPath: "frontend/login-ui/dist"
