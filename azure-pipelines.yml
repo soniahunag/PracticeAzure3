@@ -33,14 +33,9 @@ stages:
       displayName: "dotnet restore/build/test"
     - script: |
         cd backend/LoginApi
+        mkdir "$(Build.ArtifactStagingDirectory)\backend" || echo "backend folder exists"
         dotnet publish -c $(BuildConfiguration) -o "$(Build.ArtifactStagingDirectory)\backend"
       displayName: "Backend publish"
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: "$(Build.ArtifactStagingDirectory)\backend"
-        ArtifactName: "backend"
-        publishLocation: "Container"
-      displayName: "Publish backend artifacts"
     - script: |
         echo "ArtifactStagingDirectory=$(Build.ArtifactStagingDirectory)"
         echo "CurrentDir:"
@@ -50,6 +45,13 @@ stages:
         echo "List staging backend:"
         dir "$(Build.ArtifactStagingDirectory)\backend"
       displayName: "Debug: list publish output"
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: "$(Build.ArtifactStagingDirectory)\backend"
+        ArtifactName: "backend"
+        publishLocation: "Container"
+      displayName: "Publish backend artifacts"
+   
 
   - job: Frontend
     displayName: "Frontend - build"
