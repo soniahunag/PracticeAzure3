@@ -60,23 +60,42 @@ stages:
       inputs:
         versionSpec: "20.x"
 
-    - script: |
-        cd frontend/login-ui
-        npm ci
-        npm run build
-      displayName: "npm ci & build"
-    - script: |
-        echo "CurrentDir:"
-        cd
-        echo "List frontend:"
-        dir frontend
-        echo "List frontend/login-ui:"
-        dir frontend\login-ui
-        echo "List dist:"
-        dir frontend\login-ui\dist || echo "dist not found"
-      displayName: "Debug: list frontend dist"
+    - script: npm ci
+      workingDirectory: "$(Build.SourcesDirectory)/frontend/login-ui"
+      displayName: "npm ci"
+
+    - script: npm run build
+      workingDirectory: "$(Build.SourcesDirectory)/frontend/login-ui"
+      displayName: "npm run build"
+
+    - powershell: |
+        Write-Host "SourcesDirectory = $(Build.SourcesDirectory)"
+        Write-Host "== List login-ui root =="
+        Get-ChildItem -Force "$(Build.SourcesDirectory)\frontend\login-ui" | Format-Table
+
+        Write-Host "== Check dist path =="
+        if (Test-Path "$(Build.SourcesDirectory)\frontend\login-ui\dist") {
+          Write-Host "dist exists ✅"
+          Get-ChildItem "$(Build.SourcesDirectory)\frontend\login-ui\dist" -Recurse | Select-Object -First 200
+        } else {
+          Write-Host "dist NOT found ❌"
+          Write-Host "== Search dist folders under frontend/login-ui =="
+          Get-ChildItem "$(Build.SourcesDirectory)\frontend\login-ui" -Directory -Recurse |
+            Where-Object { $_.Name -eq "dist" } |
+            ForEach-Object { Write-Host "FOUND dist at:" $_.FullName }
+
+        Write-Host "== Search dist folders under repo =="
+        Get-ChildItem "$(Build.SourcesDirectory)" -Directory -Recurse |
+          Where-Object { $_.Name -eq "dist" } |
+          ForEach-Object { Write-Host "FOUND dist at:" $_.FullName }
+
+        throw "dist not found, fail the job"
+        }
+      displayName: "Debug: locate dist"
+
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: "frontend\\login-ui\\dist"
+        targetPath: "$(Build.SourcesDirectory)/frontend/login-ui/dist"
         artifact: "frontend"
-      displayName: "Publish pipleline frontend artifacts"
+      displayName: "Publish pipeline frontend artifacts"
+
