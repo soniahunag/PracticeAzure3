@@ -7,8 +7,9 @@ export default function App() {
   const [me, setMe] = useState(null);
   const [err, setErr] = useState("");
 
-  const apiBase = "http://localhost:5023"; // 注意你的後端是 5023
-
+  //const apiBase = import.meta.env.VITE_API_BASE || "http://localhost:5023"; // 注意你的後端是 5023
+  const apiBase = import.meta.env.VITE_API_BASE;
+  console.log("VITE_API_BASE =", import.meta.env.VITE_API_BASE);
   const login = async () => {
     setErr("");
     setMe(null);
