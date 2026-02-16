@@ -9,7 +9,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("LocalDev", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("http://localhost:5173" , "http://localhost:4173", "https://orange-bay-0fd5cae00.4.azurestaticapps.net")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
