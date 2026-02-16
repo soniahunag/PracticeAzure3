@@ -24,9 +24,11 @@ jobs:
           dotnet-version: '8.0'
 
       - name: Build with dotnet
+        working-directory: backend/LoginApi
         run: dotnet build --configuration Release
 
       - name: dotnet publish
+        working-directory: backend/LoginApi
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
@@ -62,4 +64,5 @@ jobs:
           app-name: 'asp-practiceazure3'
           slot-name: 'Production'
           package: .
+
           
