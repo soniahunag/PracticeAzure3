@@ -26,7 +26,7 @@ app.UseCors("LocalDev");
 
 // optional: avoid 404 on /
 app.MapGet("/", () => "LoginApi is running. Go to /swagger")
-.RequiresCors("LocalDev");
+.RequireCors("LocalDev");
 
 // POST /auth/login (fake auth)
 app.MapPost("/auth/login", (LoginRequest req) =>
@@ -41,7 +41,7 @@ app.MapPost("/auth/login", (LoginRequest req) =>
     }
 
     return Results.Unauthorized();
-}).RequiresCors("LocalDev");
+}).RequireCors("LocalDev");
 
 // GET /me (fake token check)
 app.MapGet("/me", (HttpRequest request) =>
@@ -50,7 +50,7 @@ app.MapGet("/me", (HttpRequest request) =>
         return Results.Ok(new { name = "Demo User", role = "User" });
 
     return Results.Unauthorized();
-}).RequiresCors("LocalDev");
+}).RequireCors("LocalDev");
 
 app.Run();
 
