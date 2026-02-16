@@ -9,7 +9,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("LocalDev", policy =>
     {
-        policy.WithOrigins("http://localhost:5173" , "http://localhost:4173", "https://orange-bay-0fd5cae00.4.azurestaticapps.net")
+        policy.WithOrigins("http://localhost:5173" 
+        , "http://localhost:4173",
+         "https://orange-bay-0fd5cae00.4.azurestaticapps.net")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -23,7 +25,8 @@ app.UseSwaggerUI();
 app.UseCors("LocalDev");
 
 // optional: avoid 404 on /
-app.MapGet("/", () => "LoginApi is running. Go to /swagger");
+app.MapGet("/", () => "LoginApi is running. Go to /swagger")
+.RequiresCors("LocalDev");
 
 // POST /auth/login (fake auth)
 app.MapPost("/auth/login", (LoginRequest req) =>
@@ -38,7 +41,7 @@ app.MapPost("/auth/login", (LoginRequest req) =>
     }
 
     return Results.Unauthorized();
-});
+}).RequiresCors("LocalDev");
 
 // GET /me (fake token check)
 app.MapGet("/me", (HttpRequest request) =>
@@ -47,7 +50,7 @@ app.MapGet("/me", (HttpRequest request) =>
         return Results.Ok(new { name = "Demo User", role = "User" });
 
     return Results.Unauthorized();
-});
+}).RequiresCors("LocalDev");
 
 app.Run();
 
